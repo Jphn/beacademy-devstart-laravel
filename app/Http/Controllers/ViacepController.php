@@ -10,7 +10,7 @@ class ViacepController extends Controller
     public function index(Request $req)
     {
         if ($req->cep)
-            return redirect("/viacep/{$req->cep}");
+            return redirect()->route('viacep.show', $req->cep);
 
         return view('viacep.index');
     }
