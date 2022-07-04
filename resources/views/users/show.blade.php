@@ -21,10 +21,15 @@
 				<td>{{ date('d/m/Y - H:i', strtotime($user->created_at)) }}</td>
 				<td>
 					<a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning text-white">Editar</a>
-					<a href="" class="btn btn-danger text-white">Deletar</a>
+					<button onclick="event.preventDefault(); document.getElementById('submit-form').submit();" class="btn btn-danger text-white">Deletar</button>
 				</td>
 			</tr>
 		</tbody>
 	</table>
+
+	<form id="submit-form" action="{{ route('user.delete', $user->id) }}" method="POST" hidden>
+		@method('DELETE')
+		@csrf
+	</form>
 </section>
 @endsection
