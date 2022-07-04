@@ -3,6 +3,8 @@
 @section('body')
 <h1>Novo Usuário</h1>
 
+@include('layout.error')
+
 <form action="{{ route('user.update', $user->id) }}" method="POST">
 	@method('PUT')
 	@csrf

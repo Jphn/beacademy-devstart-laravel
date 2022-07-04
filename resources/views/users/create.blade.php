@@ -3,6 +3,8 @@
 @section('body')
 <h1>Novo Usuário</h1>
 
+@include('layout.error')
+
 <form action="{{ route('user.store') }}" method="POST">
 	@csrf
 	<div class="mb-3">
