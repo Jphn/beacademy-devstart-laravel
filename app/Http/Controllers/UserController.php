@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Requests\StoreUpdateUserFormRequest;
 
 class UserController extends Controller
 {
@@ -31,7 +31,7 @@ class UserController extends Controller
         return view('users.create');
     }
 
-    public function store(Request $req)
+    public function store(StoreUpdateUserFormRequest $req)
     {
         $data = $req->all();
         $data['password'] = bcrypt($data['password']);
@@ -49,7 +49,7 @@ class UserController extends Controller
         return view('users.edit', compact('user'));
     }
 
-    public function update(Request $req, $id)
+    public function update(StoreUpdateUserFormRequest $req, $id)
     {
         if (!$user = $this->model->find($id))
             return redirect()->route('users.index');
