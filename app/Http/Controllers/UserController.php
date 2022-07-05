@@ -67,9 +67,8 @@ class UserController extends Controller
     public function delete($id)
     {
         if (!$user = $this->model->find($id))
-            return redirect()->route('users.index');
+            $user->delete();
 
-        $user->delete();
 
         return redirect()->route('users.index');
     }
