@@ -2,74 +2,77 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Http\Requests\StoreUpdateUserFormRequest;
+use App\Models\User;
 
 class UserController extends Controller
 {
-    public function __construct(User $user)
-    {
-        $this->model = $user;
-    }
+	public function __construct(User $user)
+	{
+		$this->model = $user;
+	}
 
-    public function index()
-    {
-        $users = User::all();
+	public function index()
+	{
+		$users = User::all();
 
-        return view('users.index', compact('users'));
-    }
-    public function show($id)
-    {
-        if (!$user = User::find($id))
-            return redirect()->route('users.index');
+		return view('users.index', compact('users'));
+	}
 
-        return view('users.show', compact('user'));
-    }
+	public function show($id)
+	{
+		if (!$user = User::find($id))
+			return redirect()->route('users.index');
 
-    public function create()
-    {
-        return view('users.create');
-    }
+		return view('users.show', compact('user'));
+	}
 
-    public function store(StoreUpdateUserFormRequest $req)
-    {
-        $data = $req->all();
-        $data['password'] = bcrypt($data['password']);
+	public function store(StoreUpdateUserFormRequest $req)
+	{
+		$data = $req->all();
 
-        $this->model->create($data);
+		$data['image'] = $req['image']->store('profile', 'public');
 
-        return redirect()->route('users.index');
-    }
+		$data['password'] = bcrypt($data['password']);
 
-    public function edit($id)
-    {
-        if (!$user = $this->model->find($id))
-            return redirect()->route('users.index');
+		$this->model->create($data);
 
-        return view('users.edit', compact('user'));
-    }
+		return redirect()->route('users.index');
+	}
 
-    public function update(StoreUpdateUserFormRequest $req, $id)
-    {
-        if (!$user = $this->model->find($id))
-            return redirect()->route('users.index');
+	public function create()
+	{
+		return view('users.create');
+	}
 
-        $data = $req->only('name', 'email');
+	public function edit($id)
+	{
+		if (!$user = $this->model->find($id))
+			return redirect()->route('users.index');
 
-        if ($req->password)
-            $data['password'] = bcrypt($req->password);
+		return view('users.edit', compact('user'));
+	}
 
-        $user->update($data);
+	public function update(StoreUpdateUserFormRequest $req, $id)
+	{
+		if (!$user = $this->model->find($id))
+			return redirect()->route('users.index');
 
-        return redirect()->route('users.show', $id);
-    }
+		$data = $req->only('name', 'email');
 
-    public function delete($id)
-    {
-        if (!$user = $this->model->find($id))
-            $user->delete();
+		if ($req->password)
+			$data['password'] = bcrypt($req->password);
 
+		$user->update($data);
 
-        return redirect()->route('users.index');
-    }
+		return redirect()->route('users.show', $id);
+	}
+
+	public function delete($id)
+	{
+		if (!$user = $this->model->find($id))
+			$user->delete();
+
+		return redirect()->route('users.index');
+	}
 }
