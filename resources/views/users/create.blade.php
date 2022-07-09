@@ -24,5 +24,6 @@
 			<input type="file" class="form-control" id="image" name="image">
 		</div>
 		<button type="submit" class="btn btn-primary">Enviar</button>
+		<a class="btn btn-secondary" href="{{ url()->previous() }}">Voltar</a>
 	</form>
 @endsection

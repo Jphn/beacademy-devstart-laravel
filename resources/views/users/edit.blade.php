@@ -5,7 +5,7 @@
 
 	@include('layout.error')
 
-	<form action="{{ route('user.update', $user->id) }}" method="POST">
+	<form action="{{ route('user.update', $user->id) }}" method="POST" enctype="multipart/form-data">
 		@method('PUT')
 		@csrf
 		<div class="mb-3">
@@ -25,5 +25,6 @@
 			<input type="file" class="form-control" id="image" name="image">
 		</div>
 		<button type="submit" class="btn btn-primary">Enviar</button>
+		<a class="btn btn-secondary" href="{{ url()->previous() }}">Voltar</a>
 	</form>
 @endsection
