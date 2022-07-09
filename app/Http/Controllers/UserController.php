@@ -14,7 +14,7 @@ class UserController extends Controller
 
 	public function index()
 	{
-		$users = User::all();
+		$users = User::paginate(5);
 
 		return view('users.index', compact('users'));
 	}
@@ -25,24 +25,6 @@ class UserController extends Controller
 			return redirect()->route('users.index');
 
 		return view('users.show', compact('user'));
-	}
-
-	public function store(StoreUpdateUserFormRequest $req)
-	{
-		$data = $req->all();
-
-		$data['image'] = $req['image']->store('profile', 'public');
-
-		$data['password'] = bcrypt($data['password']);
-
-		$this->model->create($data);
-
-		return redirect()->route('users.index');
-	}
-
-	public function create()
-	{
-		return view('users.create');
 	}
 
 	public function edit($id)
@@ -58,7 +40,11 @@ class UserController extends Controller
 		if (!$user = $this->model->find($id))
 			return redirect()->route('users.index');
 
-		$data = $req->only('name', 'email');
+		$data = $req->all();
+		unset($data['password']);
+
+		if ($req['image'])
+			$data['image'] = $req['image']->store('profile', 'public');
 
 		if ($req->password)
 			$data['password'] = bcrypt($req->password);
@@ -66,6 +52,25 @@ class UserController extends Controller
 		$user->update($data);
 
 		return redirect()->route('users.show', $id);
+	}
+
+	public function store(StoreUpdateUserFormRequest $req)
+	{
+		$data = $req->all();
+
+		if ($req['image'] != null)
+			$data['image'] = $req['image']->store('profile', 'public');
+
+		$data['password'] = bcrypt($data['password']);
+
+		$this->model->create($data);
+
+		return redirect()->route('users.index');
+	}
+
+	public function create()
+	{
+		return view('users.create');
 	}
 
 	public function delete($id)
