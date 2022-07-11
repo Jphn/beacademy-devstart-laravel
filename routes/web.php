@@ -9,6 +9,7 @@ Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 
 Route::delete('/user/{id}', [UserController::class, 'delete'])->name('user.delete');
 Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
+Route::get('/users/{id}/posts', [PostController::class, 'show'])->name('posts.show');
 Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
