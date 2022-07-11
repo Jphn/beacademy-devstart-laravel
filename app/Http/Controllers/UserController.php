@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUpdateUserFormRequest;
 use App\Models\User;
+use Symfony\Component\HttpFoundation\Request;
 
 class UserController extends Controller
 {
@@ -12,9 +13,9 @@ class UserController extends Controller
 		$this->model = $user;
 	}
 
-	public function index()
+	public function index(Request $req)
 	{
-		$users = User::paginate(5);
+		$users = $this->model->getUsers($req->search ?? null);
 
 		return view('users.index', compact('users'));
 	}
