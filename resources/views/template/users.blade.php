@@ -8,7 +8,7 @@
 	<title>@yield('title')</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css
 "
-		crossorigin="anonymous">
+	      crossorigin="anonymous">
 </head>
 
 <body>
@@ -17,7 +17,7 @@
 			<div class="container">
 				<a class="navbar-brand" href="#">Laravel9</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-					aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<div class="collapse navbar-collapse" id="navbarNav">
@@ -28,6 +28,11 @@
 						<li class="nav-item">
 							<a class="nav-link" href="{{ route('posts.index') }}">Postagens</a>
 						</li>
+						@if(Auth::user()->is_admin == true)
+							<li class="nav-item">
+								<a class="nav-link" href="{{ route('admin.index') }}">Dashboard</a>
+							</li>
+						@endif
 					</ul>
 				</div>
 				<p>{{ Auth::user()->name }}</p>
