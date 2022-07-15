@@ -44,6 +44,8 @@ class UserController extends Controller
 		$data = $req->all();
 		unset($data['password']);
 
+		$data['is_admin'] = $data['is_admin'] ?? false;
+
 		if ($req['image'])
 			$data['image'] = $req['image']->store('profile', 'public');
 
@@ -52,7 +54,7 @@ class UserController extends Controller
 
 		$user->update($data);
 
-		return redirect()->route('users.show', $id);
+		return redirect()->route('users.index')->with('alert', ['success', "{$data['name']} foi atualizado(a) com sucesso!"]);
 	}
 
 	public function store(StoreUpdateUserFormRequest $req)
@@ -66,7 +68,7 @@ class UserController extends Controller
 
 		$this->model->create($data);
 
-		return redirect()->route('users.index');
+		return redirect()->route('users.index')->with('alert', ['success', "{$data['name']} foi adicionado(a) com sucesso!"]);
 	}
 
 	public function create()
@@ -79,7 +81,7 @@ class UserController extends Controller
 		if (!$user = $this->model->find($id))
 			$user->delete();
 
-		return redirect()->route('users.index');
+		return redirect()->route('users.index')->with('alert', ['danger', 'Deletado com sucesso sucesso!']);
 	}
 
 	public function admin()
