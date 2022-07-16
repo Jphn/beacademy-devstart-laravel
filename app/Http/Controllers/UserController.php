@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUpdateUserFormRequest;
 use App\Models\User;
 use Symfony\Component\HttpFoundation\Request;
+use App\Exceptions\UserControllerException;
 
 class UserController extends Controller
 {
@@ -22,24 +23,24 @@ class UserController extends Controller
 
 	public function show($id)
 	{
-		if (!$user = User::find($id))
-			return redirect()->route('users.index');
+		$user = User::find($id);
 
-		return view('users.show', compact('user'));
+		if ($user)
+			return view('user.show', compact('user'));
+
+		throw new UserControllerException('Usuário não encontrado.');
 	}
 
 	public function edit($id)
 	{
-		if (!$user = $this->model->find($id))
-			return redirect()->route('users.index');
+		$user = $this->model->findOrFail($id);
 
 		return view('users.edit', compact('user'));
 	}
 
 	public function update(StoreUpdateUserFormRequest $req, $id)
 	{
-		if (!$user = $this->model->find($id))
-			return redirect()->route('users.index');
+		$user = $this->model->findOrFail($id);
 
 		$data = $req->all();
 		unset($data['password']);
@@ -78,8 +79,8 @@ class UserController extends Controller
 
 	public function delete($id)
 	{
-		if (!$user = $this->model->find($id))
-			$user->delete();
+		$user = $this->model->findOrFail($id);
+		$user->delete();
 
 		return redirect()->route('users.index')->with('alert', ['danger', 'Deletado com sucesso sucesso!']);
 	}
